@@ -5,13 +5,22 @@ import pygame as pg
 
 WIDTH, HEIGHT = 1600, 900
 
+delta = {
+    pg.K_UP: (0, -5),
+    pg.K_DOWN: (0, 5),
+    pg.K_LEFT: (-5, 0),
+    pg.K_RIGHT: (5, 0)
+}
+
 
 def main():                                             
     pg.display.set_caption("逃げろ！こうかとん")         
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     bg_img = pg.image.load("ex02/fig/pg_bg.jpg")
     kk_img = pg.image.load("ex02/fig/3.png")            
-    kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)     
+    kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)  
+    kk_rct = kk_img.get_rect()  # こうかとんsurfaceのRectを抽出する
+    kk_rct.center = ((900, 400))  # こうかとんの初期座標   
     bb_img = pg.Surface((20, 20))  # 練習1:透明のsurfaceを作る
     pg.draw.circle(bb_img, (255, 0, 0), (10, 10), 10)  # 練習1: 紅い円を作成する
     bb_img.set_colorkey((0, 0, 0))
@@ -29,9 +38,18 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT:                   # ×ボタンが押されたらゲームが終了する（必ず書く）
                 return
+            
+        key_lst = pg.key.get_pressed()  # 練習2, キーが押されたかを判別する
+        sum_move = [0, 0]
+        for k, tpl in delta.items():
+            if key_lst[k]:  # キーが押されたら
+                sum_move[0] += tpl[0]
+                sum_move[1] += tpl[1]
+
 
         screen.blit(bg_img, [0, 0])                     # blitをつかって画像を表示する
-        screen.blit(kk_img, [900, 400])
+        kk_rct.move_ip(sum_move[0], sum_move[1])
+        screen.blit(kk_img, kk_rct)
         bb_rct.move_ip(vx, vy)  # 練習2 爆弾を移動させる
         screen.blit(bb_img, bb_rct)
         pg.display.update()                             # updateすることで更新される
