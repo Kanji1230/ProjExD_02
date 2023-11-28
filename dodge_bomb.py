@@ -5,7 +5,7 @@ import pygame as pg
 
 WIDTH, HEIGHT = 1600, 900
 
-delta = {
+delta = {  # 入力された移動方向を数値にする辞書delta
     pg.K_UP: (0, -5),
     pg.K_DOWN: (0, 5),
     pg.K_LEFT: (-5, 0),
@@ -27,8 +27,8 @@ kk_test_img_dic = {  # 回転するこうかとんの辞書
     (5, 5): pg.transform.rotozoom(kk_test_img_alt, 315, 2.0),
     (0, 5):pg.transform.rotozoom(kk_test_img_alt, 270, 2.0),
     (-5, 5):pg.transform.rotozoom(kk_test_img, 45, 2.0)
-
 }
+
 
 def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
     """
@@ -49,32 +49,31 @@ def main():
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     bg_img = pg.image.load("ex02/fig/pg_bg.jpg")
 
-    kk_img = pg.image.load("ex02/fig/3.png")            
+    kk_img = pg.image.load("ex02/fig/3.png")  # こうかとんに関する記述
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)  
-    kk_rct = kk_img.get_rect()  # こうかとんsurfaceのRectを抽出する
+    kk_rct = kk_img.get_rect()
     kk_rct.center = ((900, 400))  # こうかとんの初期座標
 
-    bb_img = pg.Surface((20, 20))  # 練習1:透明のsurfaceを作る
-    pg.draw.circle(bb_img, (255, 0, 0), (10, 10), 10)  # 練習1: 紅い円を作成する
+    bb_img = pg.Surface((20, 20))  # 爆弾に関する記述
+    pg.draw.circle(bb_img, (255, 0, 0), (10, 10), 10)
     bb_img.set_colorkey((0, 0, 0))
     bb_rct = bb_img.get_rect()
-    bb_rct.centerx = random.randint(0, WIDTH)  # 爆弾の座標を決める
+    bb_rct.centerx = random.randint(0, WIDTH)  # 爆弾の初期座標をランダムに決定する
     bb_rct.centery = random.randint(0, HEIGHT)
-    vx, vy = +5, +5  # 練習２ : 爆弾の速度
+    vx, vy = +5, +5  # 爆弾の速度
 
-    kk_gameover_img = pg.image.load("ex02/fig/8.png")
+    kk_gameover_img = pg.image.load("ex02/fig/8.png")  # gameover時の画像に関する記述
     kk_gameover_img = pg.transform.rotozoom(kk_gameover_img, 0, 2.0)
 
     clock = pg.time.Clock()
     tmr = 0
     
-
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT:                   # ×ボタンが押されたらゲームが終了する（必ず書く）
                 return
             
-        if kk_rct.colliderect(bb_rct):  # 練習5, ぶつかるかどうかの判定
+        if kk_rct.colliderect(bb_rct):  # 練習5, ぶつかるかどうかの判定に関する記述
             print("Game Over")
             kk_img = kk_gameover_img
             screen.blit(bg_img, [0, 0])
@@ -83,7 +82,7 @@ def main():
             pg.time.wait(600)
             return
             
-        key_lst = pg.key.get_pressed()  # 練習2, キーが押されたかを判別する
+        key_lst = pg.key.get_pressed()  # 練習2, キーが押されたかを判別するための記述
         sum_move = [0, 0]
         for k, tpl in delta.items():
             if key_lst[k]:  # キーが押されたら
@@ -111,7 +110,6 @@ def main():
         pg.display.update()                             # updateすることで更新される
         tmr += 1
         clock.tick(50)
-
 
 
 if __name__ == "__main__":
