@@ -14,6 +14,22 @@ delta = {
 
 acce = [a for a in range( 1, 11)]  # 爆弾の加速する倍率リスト
 
+kk_test_img = pg.image.load("ex02/fig/3.png")  # こうかとん回転の準備
+kk__test_img = pg.transform.rotozoom(kk_test_img, 0, 2.0)
+kk_test_img_alt = pg.transform.flip(kk_test_img, True, False)
+kk_test_img_dic = {
+    #(0, 0):kk_test_img,
+    (-5, 0): pg.transform.rotozoom(kk_test_img, 0, 2.0),
+    (-5, -5): pg.transform.rotozoom(kk_test_img, -45, 2.0),
+    (0, -5): pg.transform.rotozoom(kk_test_img_alt, 90, 2.0),
+    (5, -5): pg.transform.rotozoom(kk_test_img_alt, 45, 2.0),
+    (5, 0): pg.transform.rotozoom(kk_test_img_alt, 0, 2.0),
+    (5, 5): pg.transform.rotozoom(kk_test_img_alt, 315, 2.0),
+    (0, 5):pg.transform.rotozoom(kk_test_img_alt, 270, 2.0),
+    (-5, 5):pg.transform.rotozoom(kk_test_img, 45, 2.0)
+
+}
+
 def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
     """
     オブジェクトが画面内or画面外であることを判定し、真理値タプルを返す関数
@@ -71,6 +87,8 @@ def main():
         kk_rct.move_ip(sum_move[0], sum_move[1])  # こうかとんの表示
         if check_bound(kk_rct) != (True, True):
             kk_rct.move_ip(-sum_move[0], -sum_move[1])
+        if (sum_move[0], sum_move[1]) != (0, 0):
+            kk_img = kk_test_img_dic[(sum_move[0], sum_move[1])]
         screen.blit(kk_img, kk_rct)
 
         avx, avy = vx * acce[min(tmr // 500, 9)], vy * acce[min(tmr // 500, 9)]  # 爆弾の加速倍率リストを参照して加速
@@ -85,6 +103,7 @@ def main():
         pg.display.update()                             # updateすることで更新される
         tmr += 1
         clock.tick(50)
+
 
 
 if __name__ == "__main__":
