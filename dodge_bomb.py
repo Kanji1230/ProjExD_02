@@ -1,3 +1,4 @@
+import random
 import sys
 import pygame as pg
 
@@ -5,22 +6,29 @@ import pygame as pg
 WIDTH, HEIGHT = 1600, 900
 
 
-def main():                                             #メイン関数
-    pg.display.set_caption("逃げろ！こうかとん")         #ウィンドウの名前を「逃げろ！こうかんとん」にしている
+def main():                                             
+    pg.display.set_caption("逃げろ！こうかとん")         
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     bg_img = pg.image.load("ex02/fig/pg_bg.jpg")
-    kk_img = pg.image.load("ex02/fig/3.png")            #サーフェイスというクラスになっている
-    kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)      #拡大縮小
+    kk_img = pg.image.load("ex02/fig/3.png")            
+    kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)     
+    bb_img = pg.Surface((20, 20))  # 練習1:透明のsurfaceを作る
+    pg.draw.circle(bb_img, (255, 0, 0), (10, 10), 10)  # 練習1: 紅い円を作成する
+    bb_img.set_colorkey((0, 0, 0))
+    bb_rct = bb_img.get_rect()
+    bb_rct.centerx = random.randint(0, WIDTH)  # 爆弾の座標を決める
+    bb_rct.centery = random.randint(0, HEIGHT)
     clock = pg.time.Clock()
     tmr = 0
     while True:
         for event in pg.event.get():
-            if event.type == pg.QUIT:                   #×ボタンが押されたらゲームが終了する（必ず書く）
+            if event.type == pg.QUIT:                   # ×ボタンが押されたらゲームが終了する（必ず書く）
                 return
 
-        screen.blit(bg_img, [0, 0])                     #blitをつかって画像を表示する
+        screen.blit(bg_img, [0, 0])                     # blitをつかって画像を表示する
         screen.blit(kk_img, [900, 400])
-        pg.display.update()                             #updateすることで更新される
+        screen.blit(bb_img, bb_rct)
+        pg.display.update()                             # updateすることで更新される
         tmr += 1
         clock.tick(10)
 
