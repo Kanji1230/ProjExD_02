@@ -57,6 +57,10 @@ def main():
             if event.type == pg.QUIT:                   # ×ボタンが押されたらゲームが終了する（必ず書く）
                 return
             
+        if kk_rct.colliderect(bb_rct):  # 練習5, ぶつかるかどうかの判定
+            print("Game Over")
+            return
+            
         key_lst = pg.key.get_pressed()  # 練習2, キーが押されたかを判別する
         sum_move = [0, 0]
         for k, tpl in delta.items():
