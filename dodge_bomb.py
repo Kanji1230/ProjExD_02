@@ -14,10 +14,10 @@ delta = {
 
 acce = [a for a in range( 1, 11)]  # 爆弾の加速する倍率リスト
 
-kk_test_img = pg.image.load("ex02/fig/3.png")  # こうかとん回転の準備
+kk_test_img = pg.image.load("ex02/fig/3.png")                           # こうかとん回転の準備
 kk__test_img = pg.transform.rotozoom(kk_test_img, 0, 2.0)
 kk_test_img_alt = pg.transform.flip(kk_test_img, True, False)
-kk_test_img_dic = {
+kk_test_img_dic = {  # 回転するこうかとんの辞書
     #(0, 0):kk_test_img,
     (-5, 0): pg.transform.rotozoom(kk_test_img, 0, 2.0),
     (-5, -5): pg.transform.rotozoom(kk_test_img, -45, 2.0),
@@ -62,6 +62,9 @@ def main():
     bb_rct.centery = random.randint(0, HEIGHT)
     vx, vy = +5, +5  # 練習２ : 爆弾の速度
 
+    kk_gameover_img = pg.image.load("ex02/fig/8.png")
+    kk_gameover_img = pg.transform.rotozoom(kk_gameover_img, 0, 2.0)
+
     clock = pg.time.Clock()
     tmr = 0
     
@@ -73,6 +76,11 @@ def main():
             
         if kk_rct.colliderect(bb_rct):  # 練習5, ぶつかるかどうかの判定
             print("Game Over")
+            kk_img = kk_gameover_img
+            screen.blit(bg_img, [0, 0])
+            screen.blit(kk_img, kk_rct)
+            pg.display.update()
+            pg.time.wait(600)
             return
             
         key_lst = pg.key.get_pressed()  # 練習2, キーが押されたかを判別する
@@ -87,8 +95,8 @@ def main():
         kk_rct.move_ip(sum_move[0], sum_move[1])  # こうかとんの表示
         if check_bound(kk_rct) != (True, True):
             kk_rct.move_ip(-sum_move[0], -sum_move[1])
-        if (sum_move[0], sum_move[1]) != (0, 0):
-            kk_img = kk_test_img_dic[(sum_move[0], sum_move[1])]
+        if (sum_move[0], sum_move[1]) != (0, 0):  # 入力がないときを除く
+            kk_img = kk_test_img_dic[(sum_move[0], sum_move[1])]  # 「回転するこうかとんの辞書」を参照して画像を決定
         screen.blit(kk_img, kk_rct)
 
         avx, avy = vx * acce[min(tmr // 500, 9)], vy * acce[min(tmr // 500, 9)]  # 爆弾の加速倍率リストを参照して加速
